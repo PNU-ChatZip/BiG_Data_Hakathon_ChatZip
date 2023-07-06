@@ -14,6 +14,7 @@ class ChatChannelScreen extends StatefulWidget {
 class _ChatChannelScreenState extends State<ChatChannelScreen> {
   // 채팅방 갯수
   final List<int> totalChannel = [1, 2, 3, 4, 5];
+  static List<bool> WhiteList = [false, false, false, false, false];
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +29,29 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               for (var channel in totalChannel)
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatScreen(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    child: Text("채팅방 $channel"),
+                ListTile(
+                  tileColor: Colors.yellow[50],
+                  title: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChatScreen(),
+                        ),
+                      );
+                    },
+                    child: Text('채팅방$channel'),
                   ),
-                ),
+                  trailing: Switch(
+                    activeColor: Colors.red,
+                    value: WhiteList[channel - 1],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        WhiteList[channel - 1] = value!;
+                      });
+                    },
+                  ),
+                )
             ],
           ),
         ),
