@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'chat_channel_screen.dart';
+import 'notification_setting.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -12,6 +12,19 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat zip'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NotificationSetting(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
