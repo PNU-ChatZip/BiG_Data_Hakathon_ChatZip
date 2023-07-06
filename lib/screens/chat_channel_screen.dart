@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'chat_screen.dart';
+
 class ChatChannelScreen extends StatefulWidget {
   const ChatChannelScreen({
     super.key,
@@ -26,8 +28,18 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               for (var channel in totalChannel)
-                Container(
-                  child: Text("채팅방 $channel"),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    child: Text("채팅방 $channel"),
+                  ),
                 ),
             ],
           ),
