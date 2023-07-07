@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "http://tetori.iptime.org:3174/data";
+  static const String baseUrl = "http://13.209.41.55/data";
 
   Map<String, String> headers = {
     'Content-Type': 'application/json',

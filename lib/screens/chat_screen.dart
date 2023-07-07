@@ -21,10 +21,18 @@ class _ChatScreenState extends State<ChatScreen> {
   List<ServiceNotificationEvent> events = [];
   StreamSubscription<ServiceNotificationEvent>? _subscription;
   late final SharedPreferences prefs;
-  var result = "대충 텍스트 슈루룩 화면";
+  var result = "";
+  List<String> textData = [];
+
+  initScreen() async {
+    await initPrefs();
+    await configSceen();
+  }
 
   Future initPrefs() async {
-    // prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
+    var chatData = prefs.getStringList("data${widget.channelIndex}");
+    if (chatData != null) print(chatData);
     // final channels = prefs.getStringList('channels');
     // if (channels == null) {
     //   await prefs.setStringList('channels', []);
@@ -52,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
     chatData ??= [];
     chatData.add(res['result']);
     prefs.setStringList("data${widget.channelIndex}", chatData);
+    prefs.setStringList(idx, []);
     configSceen();
   }
 
@@ -94,21 +103,23 @@ class _ChatScreenState extends State<ChatScreen> {
   //   print("현재 저장된 채팅방 갯수: ${channels?.length}");
   // }
 
-  void configSceen() async {
-    prefs = await SharedPreferences.getInstance();
+  Future configSceen() async {
     final chatData = prefs.getStringList("data${widget.channelIndex}");
     if (chatData != null) {
+      textData = [];
       for (var data in chatData) {
-        result += '$data\n----------';
+        textData.add(data);
       }
     }
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
+    initScreen();
     // initPrefs();
-    configSceen();
+    // configSceen();
     // _subscription =
     //     NotificationListenerService.notificationsStream.listen((event) {
     //   saveEvent(event);
@@ -147,7 +158,17 @@ class _ChatScreenState extends State<ChatScreen> {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(30),
-                  child: Text(result),
+                  child: Column(
+                    children: [
+                      for (var text in textData)
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 1),
+                          ),
+                          child: Text(text),
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
