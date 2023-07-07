@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:notification_listener_service/notification_event.dart';
 import 'package:notification_listener_service/notification_listener_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:temp10/screens/home_screen.dart';
 
 void main() {
@@ -18,13 +19,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription<ServiceNotificationEvent>? _subscription;
   List<ServiceNotificationEvent> events = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  StreamSubscription<ServiceNotificationEvent>? _subscription;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,14 @@
 class ChatModel {
-  late final String name;
-  late final String content;
+  int? id;
+  String name;
+  String content;
 
-  ChatModel({required name, required content});
+  ChatModel({this.id, required this.name, required this.content});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'content': content,
+    };
+  }
 }
