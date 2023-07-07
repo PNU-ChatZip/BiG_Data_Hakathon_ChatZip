@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
           color: Color.fromRGBO(46, 46, 60, 1),
         ),
         title: const Text(
-          'C H A T  Z I P',
+          'CHAT ZIP',
           style: TextStyle(
             color: Color.fromRGBO(46, 46, 60, 1),
             fontWeight: FontWeight.w800,

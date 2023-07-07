@@ -171,7 +171,7 @@ class _ChatScreenState extends State<ChatScreen> {
               height: 10,
             ),
             SizedBox(
-              height: 600,
+              height: 570,
               width: 400,
               // decoration: BoxDecoration(
               //   border: Border.all(
