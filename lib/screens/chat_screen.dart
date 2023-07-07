@@ -57,7 +57,25 @@ class _ChatScreenState extends State<ChatScreen> {
     final channels = prefs.getStringList('channels');
     final idx = channels![widget.channelIndex];
     final chats = prefs.getStringList(idx);
-    if (chats!.isEmpty) return;
+    if (chats!.isEmpty) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext buildcontext) {
+            return AlertDialog(
+              content: Text("채팅기록이 없습니다"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("확인"),
+                )
+              ],
+            );
+          });
+      return;
+    }
     final res = await ApiService().postChats(chats);
     print(res);
     getData(res['result']);
