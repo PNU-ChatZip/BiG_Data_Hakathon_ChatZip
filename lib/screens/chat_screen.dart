@@ -28,20 +28,30 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    final channels = prefs.getStringList('channels');
-    if (channels == null) {
-      await prefs.setStringList('channels', []);
-    }
+    // final channels = prefs.getStringList('channels');
+    // if (channels == null) {
+    //   await prefs.setStringList('channels', []);
+    // }
 
-    final whiteList = prefs.getStringList('whiteList');
-    if (whiteList == null) {
-      await prefs.setStringList('whiteList', []);
-    }
+    // final whiteList = prefs.getStringList('whiteList');
+    // if (whiteList == null) {
+    //   await prefs.setStringList('whiteList', []);
+    // }
   }
 
   String convertUint8ListToString(Uint8List uint8list) {
     Uint8List bytes = Uint8List.fromList(uint8list);
     return String.fromCharCodes(bytes);
+  }
+
+  void setTextData() {
+    final channels = prefs.getStringList('channels');
+    final idx = channels![widget.channelIndex];
+    final channel = prefs.getStringList(idx);
+    for (var t in channel!) {
+      result += '$t\n';
+    }
+    getData(result);
   }
 
   void saveEvent(ServiceNotificationEvent event) async {
@@ -75,14 +85,14 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     initPrefs();
-    _subscription =
-        NotificationListenerService.notificationsStream.listen((event) {
-      saveEvent(event);
-      setState(() {
-        events.add(event);
-        print(event);
-      });
-    });
+    // _subscription =
+    //     NotificationListenerService.notificationsStream.listen((event) {
+    //   saveEvent(event);
+    //   setState(() {
+    //     events.add(event);
+    //     print(event);
+    //   });
+    // });
   }
 
   getData(String data) {
@@ -148,17 +158,18 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             TextButton(
               onPressed: () {
-                String result = '채팅방 갯수: ';
-                final channels = prefs.getStringList('channels');
-                result += '${channels!.length}';
-                for (var k in channels) {
-                  final channel = prefs.getStringList(k);
-                  for (var i in channel!) {
-                    result += i;
-                  }
-                  result += '\n\n\n';
-                }
-                getData(result);
+                setTextData();
+                // String result = '채팅방 갯수: ';
+                // final channels = prefs.getStringList('channels');
+                // result += '${channels!.length}';
+                // for (var k in channels) {
+                //   final channel = prefs.getStringList(k);
+                //   for (var i in channel!) {
+                //     result += i;
+                //   }
+                //   result += '\n\n\n';
+                // }
+                // getData(result);
               },
               child: const Text("채팅방 딸깍"),
             ),
