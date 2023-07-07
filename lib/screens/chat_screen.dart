@@ -3,10 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:notification_listener_service/notification_event.dart';
-import 'package:notification_listener_service/notification_listener_service.dart';
-import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:temp10/models/chat_model.dart';
 import 'package:temp10/services/api_service.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -48,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final channels = prefs.getStringList('channels');
     final idx = channels![widget.channelIndex];
     final channel = prefs.getStringList(idx);
+    print(channel);
     for (var t in channel!) {
       result += '$t\n';
     }
@@ -127,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             Center(
@@ -135,7 +133,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 onPressed: () {},
                 style: ButtonStyle(
                   padding: MaterialStateProperty.all<EdgeInsets>(
-                    EdgeInsets.symmetric(
+                    const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 15,
                     ),
@@ -143,16 +141,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 child: GestureDetector(
                   onTap: () async {
-                    List<dynamic> chats = [
-                      {"name": "kms", "comment": "dasd"},
-                      {"name": "ads", "comment": "1223"},
-                      {"name": "dds", "comment": "zxvb"}
-                    ];
-                    final res = await ApiService().postChats(chats);
+                    final channels = prefs.getStringList('channels');
+                    final idx = channels![widget.channelIndex];
+                    final chats = prefs.getStringList(idx);
+                    final res = await ApiService().postChats(chats!);
                     print(res);
                     getData(res.toString());
                   },
-                  child: Text("딸깍"),
+                  child: const Text("딸깍"),
                 ),
               ),
             ),

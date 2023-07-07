@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import '../models/chat_model.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -14,6 +13,27 @@ class ApiService {
   Map<String, String> cookies = {};
 
   Future<dynamic> postChats(List<dynamic> chats) async {
+    print(chats);
+    for (var chat in chats) {
+      print(chat);
+    }
+    // ap dictionary = Map.from(chats[0]);
+    // final Pkey = dictionary.keys.toList();
+    // final Pvalue = dictionary.values.toList();
+    // List<dynamic> answer = [];
+    // for (int i = 0; i < Pkey.length; i++) {
+    //   answer.add(
+    //     {"name": Pkey[i], "comment": Pvalue[i]},
+    //   );
+    // }
+    // print(answer);
+    // print(
+    //   jsonEncode({
+    //     "group_id": 1,
+    //     "segment_id": 1,
+    //     "data": answer,
+    //   }),
+    // );
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: headers,

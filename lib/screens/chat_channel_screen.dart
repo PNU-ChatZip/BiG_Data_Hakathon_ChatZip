@@ -185,9 +185,9 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       setState(() {
                         WhiteList[channel - 1] = value!;
                       });
-                      // Update whitelist value in SharedPreferences
                       List<String>? whiteList =
                           prefs.getStringList('whiteList');
+<<<<<<< HEAD
                       //
                       // // Initialize whiteList if it's null or length is less than required
                       // if (whiteList == null ||
@@ -198,6 +198,16 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       // }
 
                       whiteList![channel - 1] = value!.toString();
+=======
+
+                      if (whiteList == null ||
+                          whiteList.length <= channel - 1) {
+                        whiteList = List<String>.filled(channel, 'false',
+                            growable: true);
+                      }
+
+                      whiteList[channel - 1] = value!.toString();
+>>>>>>> a814de0 (comm)
                       prefs.setStringList('whiteList', whiteList);
                       setState(() {});
                       print(whiteList);
