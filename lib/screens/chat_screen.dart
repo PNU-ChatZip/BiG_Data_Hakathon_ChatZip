@@ -30,6 +30,11 @@ class _ChatScreenState extends State<ChatScreen> {
     if (channels == null) {
       await prefs.setStringList('channels', []);
     }
+
+    final whiteList = prefs.getStringList('whiteList');
+    if (whiteList == null) {
+      await prefs.setStringList('whiteList', []);
+    }
   }
 
   String convertUint8ListToString(Uint8List uint8list) {
@@ -55,6 +60,10 @@ class _ChatScreenState extends State<ChatScreen> {
         channels!.add(icon);
         prefs.setStringList('channels', channels);
         prefs.setStringList(icon, [event.content!]);
+
+        // whitelist 추가
+        final whiteList = prefs.getStringList('whiteList');
+        whiteList!.add("false");
       }
     }
     print("현재 저장된 채팅방 갯수: ${channels?.length}");
@@ -87,72 +96,71 @@ class _ChatScreenState extends State<ChatScreen> {
         title: const Text('Chat zip'),
       ),
       body: Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: 500,
-                width: 300,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 500,
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
                 ),
+              ),
+              child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(30),
                   child: Text(result),
                 ),
               ),
-              SizedBox(
-                height: 50,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                      EdgeInsets.symmetric(
-                        horizontal: 50,
-                        vertical: 15,
-                      ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 15,
                     ),
                   ),
-                  child: GestureDetector(
-                    onTap: () async {
-                      List<dynamic> chats = [
-                        {"name": "kms", "comment": "dasd"},
-                        {"name": "ads", "comment": "1223"},
-                        {"name": "dds", "comment": "zxvb"}
-                      ];
-                      final res = await ApiService().postChats(chats);
-                      print(res);
-                      getData(res.toString());
-                    },
-                    child: Text("딸깍"),
-                  ),
+                ),
+                child: GestureDetector(
+                  onTap: () async {
+                    List<dynamic> chats = [
+                      {"name": "kms", "comment": "dasd"},
+                      {"name": "ads", "comment": "1223"},
+                      {"name": "dds", "comment": "zxvb"}
+                    ];
+                    final res = await ApiService().postChats(chats);
+                    print(res);
+                    getData(res.toString());
+                  },
+                  child: Text("딸깍"),
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  String result = '채팅방 갯수: ';
-                  final channels = prefs.getStringList('channels');
-                  result += '${channels!.length}';
-                  for (var k in channels) {
-                    final channel = prefs.getStringList(k);
-                    for (var i in channel!) {
-                      result += i;
-                    }
-                    result += '\n\n\n';
+            ),
+            TextButton(
+              onPressed: () {
+                String result = '채팅방 갯수: ';
+                final channels = prefs.getStringList('channels');
+                result += '${channels!.length}';
+                for (var k in channels) {
+                  final channel = prefs.getStringList(k);
+                  for (var i in channel!) {
+                    result += i;
                   }
-                  getData(result);
-                },
-                child: const Text("채팅방 딸깍"),
-              ),
-            ],
-          ),
+                  result += '\n\n\n';
+                }
+                getData(result);
+              },
+              child: const Text("채팅방 딸깍"),
+            ),
+          ],
         ),
       ),
     );
