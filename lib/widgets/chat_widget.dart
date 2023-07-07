@@ -9,6 +9,7 @@ Widget getChatsWidgets(List<String> strings, bool isLoading) {
       Padding(
         padding: const EdgeInsets.only(
           top: 10,
+          bottom: 5,
         ),
         child: Text(
           textFragments[0],

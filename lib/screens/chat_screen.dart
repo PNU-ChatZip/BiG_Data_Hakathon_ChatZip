@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -99,11 +100,13 @@ class _ChatScreenState extends State<ChatScreen> {
     final idx = channels![widget.channelIndex];
     final channel = prefs.getStringList(idx);
     print(channel);
-    result = '';
+    textData = [];
     for (var t in channel!) {
-      result += '$t\n';
+      Map<String, dynamic> chat = jsonDecode(t);
+      print(chat);
+      textData.add('${chat['name']}#FLAG${chat['comment']}');
     }
-    getData(result);
+    setState(() {});
   }
 
   Future configSceen() async {
@@ -194,6 +197,31 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                     child: const Text(
                       "요약 보기",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Noto_Serif_KR',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      setTextData();
+                    },
+                    child: const Text(
+                      "대화 보기",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
