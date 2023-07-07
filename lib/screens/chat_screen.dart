@@ -54,32 +54,32 @@ class _ChatScreenState extends State<ChatScreen> {
     getData(result);
   }
 
-  void saveEvent(ServiceNotificationEvent event) async {
-    // prefs = await SharedPreferences.getInstance();
-    final channels = prefs.getStringList('channels');
-    if (event.largeIcon != null) {
-      final icon = convertUint8ListToString(event.largeIcon!);
-      List<String>? channel = prefs.getStringList(icon);
-      if (channel != null) {
-        print("존재하는 채팅방");
-        channel.add({event.title, event.content}.toString());
-        prefs.setStringList(icon, channel);
-      } else {
-        print("없는 채팅방");
-
-        // 새로운 채팅방 추가
-        final channels = prefs.getStringList('channels');
-        channels!.add(icon);
-        prefs.setStringList('channels', channels);
-        prefs.setStringList(icon, [event.content!]);
-
-        // whitelist 추가
-        final whiteList = prefs.getStringList('whiteList');
-        whiteList!.add("false");
-      }
-    }
-    print("현재 저장된 채팅방 갯수: ${channels?.length}");
-  }
+  // void saveEvent(ServiceNotificationEvent event) async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   final channels = prefs.getStringList('channels');
+  //   if (event.largeIcon != null) {
+  //     final icon = convertUint8ListToString(event.largeIcon!);
+  //     List<String>? channel = prefs.getStringList(icon);
+  //     if (channel != null) {
+  //       print("존재하는 채팅방");
+  //       channel.add({event.title, event.content}.toString());
+  //       prefs.setStringList(icon, channel);
+  //     } else {
+  //       print("없는 채팅방");
+  //
+  //       // 새로운 채팅방 추가
+  //       final channels = prefs.getStringList('channels');
+  //       channels!.add(icon);
+  //       prefs.setStringList('channels', channels);
+  //       prefs.setStringList(icon, [event.content!]);
+  //
+  //       // whitelist 추가
+  //       final whiteList = prefs.getStringList('whiteList');
+  //       whiteList!.add("false");
+  //     }
+  //   }
+  //   print("현재 저장된 채팅방 갯수: ${channels?.length}");
+  // }
 
   @override
   void initState() {
@@ -105,7 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat zip 채팅방 ${widget.channelIndex}'),
+        title: Text('Chat zip 채팅방 ${widget.channelIndex + 1}'),
       ),
       body: Center(
         child: Column(
