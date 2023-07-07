@@ -39,8 +39,8 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
         final channelIndex = channels!.indexOf(icon);
         print("Existing Chat Room");
         if (whiteList![channelIndex] == "true") {
-          channel
-              .add('{"name":"${event.title}", "comment":"${event.content}"}');
+          channel.add(
+              '{"name":"${event.title?.replaceAll(RegExp('[^a-zA-Z0-9가-힣\\s]'), "").replaceAll("\n", " ")}", "comment":"${event.content?.replaceAll(RegExp('[^a-zA-Z0-9가-힣\\s]'), "").replaceAll("\n", " ")}"}');
           // channel.add({event.title, event.content}.toString());
         }
         prefs.setStringList(icon, channel);

@@ -8,6 +8,7 @@ import 'package:temp10/services/api_service.dart';
 
 class ChatScreen extends StatefulWidget {
   final int channelIndex;
+
   const ChatScreen({
     super.key,
     required this.channelIndex,
@@ -23,6 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late final SharedPreferences prefs;
   var result = "";
   List<String> textData = [];
+  bool isLoading = false;
 
   initScreen() async {
     await initPrefs();
@@ -53,12 +55,13 @@ class _ChatScreenState extends State<ChatScreen> {
     final channels = prefs.getStringList('channels');
     final idx = channels![widget.channelIndex];
     final chats = prefs.getStringList(idx);
-    final res = await ApiService().postChats(chats!);
+    if (chats!.isEmpty) return;
+    final res = await ApiService().postChats(chats);
     print(res);
     getData(res['result']);
     var chatData = prefs.getStringList("data${widget.channelIndex}");
     chatData ??= [];
-    chatData.add(res['result']);
+    chatData.add('${res['datetime']}#FLAG${res['result']}');
     prefs.setStringList("data${widget.channelIndex}", chatData);
     prefs.setStringList(idx, []);
     configSceen();
@@ -108,7 +111,9 @@ class _ChatScreenState extends State<ChatScreen> {
     if (chatData != null) {
       textData = [];
       for (var data in chatData) {
-        textData.add(data);
+        for (var t in data.split("#FLAG")) {
+          textData.add(t);
+        }
       }
     }
     setState(() {});
@@ -225,7 +230,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   child: TextButton(
-                    onPressed: getApiResult,
+                    onPressed: () {
+                      getApiResult();
+                    },
                     child: const Text(
                       "요약 보기",
                       style: TextStyle(
@@ -245,7 +252,38 @@ class _ChatScreenState extends State<ChatScreen> {
                     color: const Color.fromRGBO(255, 0, 0, 0.7),
                   ),
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext ctx) {
+                          return AlertDialog(
+                            content: const Text("삭제하실 건가요?"),
+                            actions: [
+                              TextButton(
+                                child: const Text("예"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  final channels =
+                                      prefs.getStringList('channels');
+                                  final idx = channels![widget.channelIndex];
+                                  prefs.setStringList(idx, []);
+                                  prefs.setStringList(
+                                      "data${widget.channelIndex}", []);
+                                  configSceen();
+                                },
+                              ),
+                              TextButton(
+                                child: const Text("아니요"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              )
+                            ],
+                          );
+                        },
+                      );
+                    },
                     child: const Text(
                       "CLEAR",
                       style: TextStyle(

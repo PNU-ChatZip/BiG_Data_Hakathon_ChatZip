@@ -23,6 +23,7 @@ class ApiService {
     List<Map<String, dynamic>> answer = [];
     for (var chat in chats) {
       answer.add(jsonDecode(chat));
+      print(answer);
     }
     // for (int i = 0; i < Pkey.length; i++) {
     //   answer.add(
