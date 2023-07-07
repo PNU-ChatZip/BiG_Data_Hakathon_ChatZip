@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget getChatsWidgets(List<String> strings) {
+Widget getChatsWidgets(List<String> strings, bool isLoading) {
   List<Widget> list = [];
   for (var i = 0; i < strings.length; i++) {
     final textFragments = strings[i].split('#FLAG');
@@ -41,6 +41,11 @@ Widget getChatsWidgets(List<String> strings) {
       ),
     );
   }
+
+  list.add(Center(
+    child: !isLoading ? const Center() : const CircularProgressIndicator(),
+  ));
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: list,

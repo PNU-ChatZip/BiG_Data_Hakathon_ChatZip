@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:notification_listener_service/notification_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:temp10/services/api_service.dart';
@@ -76,6 +77,9 @@ class _ChatScreenState extends State<ChatScreen> {
           });
       return;
     }
+    setState(() {
+      isLoading = true;
+    });
     final res = await ApiService().postChats(chats);
     print(res);
     getData(res['result']);
@@ -84,6 +88,9 @@ class _ChatScreenState extends State<ChatScreen> {
     chatData.add('${res['datetime']}#FLAG${res['result']}');
     prefs.setStringList("data${widget.channelIndex}", chatData);
     prefs.setStringList(idx, []);
+    setState(() {
+      isLoading = false;
+    });
     configSceen();
   }
 
@@ -99,42 +106,12 @@ class _ChatScreenState extends State<ChatScreen> {
     getData(result);
   }
 
-  // void saveEvent(ServiceNotificationEvent event) async {
-  //   prefs = await SharedPreferences.getInstance();
-  //   final channels = prefs.getStringList('channels');
-  //   if (event.largeIcon != null) {
-  //     final icon = convertUint8ListToString(event.largeIcon!);
-  //     List<String>? channel = prefs.getStringList(icon);
-  //     if (channel != null) {
-  //       print("존재하는 채팅방");
-  //       channel.add({event.title, event.content}.toString());
-  //       prefs.setStringList(icon, channel);
-  //     } else {
-  //       print("없는 채팅방");
-  //
-  //       // 새로운 채팅방 추가
-  //       final channels = prefs.getStringList('channels');
-  //       channels!.add(icon);
-  //       prefs.setStringList('channels', channels);
-  //       prefs.setStringList(icon, [event.content!]);
-  //
-  //       // whitelist 추가
-  //       final whiteList = prefs.getStringList('whiteList');
-  //       whiteList!.add("false");
-  //     }
-  //   }
-  //   print("현재 저장된 채팅방 갯수: ${channels?.length}");
-  // }
-
   Future configSceen() async {
     final chatData = prefs.getStringList("data${widget.channelIndex}");
     if (chatData != null) {
       textData = [];
       for (var data in chatData) {
         textData.add(data);
-        // for (var t in data.split("#FLAG")) {
-        //   textData.add(t);
-        // }
       }
     }
     setState(() {});
@@ -144,16 +121,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     initScreen();
-    // initPrefs();
-    // configSceen();
-    // _subscription =
-    //     NotificationListenerService.notificationsStream.listen((event) {
-    //   saveEvent(event);
-    //   setState(() {
-    //     events.add(event);
-    //     print(event);
-    //   });
-    // });
   }
 
   getData(String data) {
@@ -203,37 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     vertical: 15,
                     horizontal: 15,
                   ),
-                  child: getChatsWidgets(textData),
-                  // child: Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     for (var text in textData)
-                  //       Padding(
-                  //         padding: const EdgeInsets.symmetric(
-                  //           vertical: 6,
-                  //           //horizontal: 4,
-                  //         ),
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(10),
-                  //             color: Colors.white,
-                  //             border: Border.all(color: Colors.white, width: 1),
-                  //           ),
-                  //           child: Padding(
-                  //             padding: const EdgeInsets.all(6.0),
-                  //             child: Text(
-                  //               text,
-                  //               style: const TextStyle(
-                  //                 color: Color.fromRGBO(46, 46, 60, 1),
-                  //                 fontFamily: 'Noto_Serif_KR',
-                  //                 fontWeight: FontWeight.w400,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //   ],
-                  // ),
+                  child: getChatsWidgets(textData, isLoading),
                 ),
               ),
             ),
