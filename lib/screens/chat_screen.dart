@@ -6,6 +6,8 @@ import 'package:notification_listener_service/notification_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:temp10/services/api_service.dart';
 
+import '../widgets/chat_widget.dart';
+
 class ChatScreen extends StatefulWidget {
   final int channelIndex;
 
@@ -111,9 +113,10 @@ class _ChatScreenState extends State<ChatScreen> {
     if (chatData != null) {
       textData = [];
       for (var data in chatData) {
-        for (var t in data.split("#FLAG")) {
-          textData.add(t);
-        }
+        textData.add(data);
+        // for (var t in data.split("#FLAG")) {
+        //   textData.add(t);
+        // }
       }
     }
     setState(() {});
@@ -182,36 +185,37 @@ class _ChatScreenState extends State<ChatScreen> {
                     vertical: 15,
                     horizontal: 15,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (var text in textData)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 6,
-                            //horizontal: 4,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Text(
-                                text,
-                                style: const TextStyle(
-                                  color: Color.fromRGBO(46, 46, 60, 1),
-                                  fontFamily: 'Noto_Serif_KR',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  child: getChatsWidgets(textData),
+                  // child: Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     for (var text in textData)
+                  //       Padding(
+                  //         padding: const EdgeInsets.symmetric(
+                  //           vertical: 6,
+                  //           //horizontal: 4,
+                  //         ),
+                  //         child: Container(
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(10),
+                  //             color: Colors.white,
+                  //             border: Border.all(color: Colors.white, width: 1),
+                  //           ),
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.all(6.0),
+                  //             child: Text(
+                  //               text,
+                  //               style: const TextStyle(
+                  //                 color: Color.fromRGBO(46, 46, 60, 1),
+                  //                 fontFamily: 'Noto_Serif_KR',
+                  //                 fontWeight: FontWeight.w400,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //   ],
+                  // ),
                 ),
               ),
             ),

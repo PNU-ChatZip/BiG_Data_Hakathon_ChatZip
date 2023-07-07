@@ -19,7 +19,9 @@ class ChatChannelScreen extends StatefulWidget {
 
 class _ChatChannelScreenState extends State<ChatChannelScreen> {
   final List<int> totalChannel = [];
+  final List<Uint8List> icons = [];
   static List<bool> WhiteList = [];
+
   List<ServiceNotificationEvent> events = [];
   StreamSubscription<ServiceNotificationEvent>? _subscription;
   late SharedPreferences prefs;
@@ -27,6 +29,11 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
   String convertUint8ListToString(Uint8List uint8list) {
     Uint8List bytes = Uint8List.fromList(uint8list);
     return String.fromCharCodes(bytes);
+  }
+
+  Uint8List convertStringToUint8List(String str) {
+    final List<int> codeUnits = str.codeUnits;
+    return Uint8List.fromList(codeUnits);
   }
 
   void saveEvent(ServiceNotificationEvent event) async {
@@ -48,6 +55,7 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
         print("New Chat Room");
 
         // Add new chat room
+        icons.add(event.largeIcon!);
         channels!.add(icon);
         prefs.setStringList('channels', channels);
         prefs.setStringList(icon, []);
@@ -78,6 +86,7 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
 
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
+
     final channels = prefs.getStringList('channels');
     if (channels == null) {
       await prefs.setStringList('channels', []);
@@ -100,6 +109,10 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
       } else {
         WhiteList.add(true);
       }
+    }
+
+    for (var channel in channels!) {
+      icons.add(convertStringToUint8List(channel));
     }
 
     setState(() {});
@@ -171,7 +184,15 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.ice_skating),
+                          // const Icon(Icons.ice_skating),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: Image.memory(
+                              icons[channel - 1],
+                              width: 50,
+                              height: 50,
+                            ),
+                          ),
                           Text(
                             'ROOM $channel',
                             style: const TextStyle(
