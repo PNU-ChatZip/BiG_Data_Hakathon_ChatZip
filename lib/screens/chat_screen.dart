@@ -139,33 +139,71 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(46, 46, 60, 1),
       appBar: AppBar(
-        title: Text('Chat zip 채팅방 ${widget.channelIndex + 1}'),
+        iconTheme: const IconThemeData(
+          color: Color.fromRGBO(46, 46, 60, 1),
+        ),
+        title: Text(
+          'Chat zip 채팅방 ${widget.channelIndex + 1}',
+          style: const TextStyle(
+            color: Color.fromRGBO(46, 46, 60, 1),
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Noto_Serif',
+            fontSize: 20,
+          ),
+        ),
+        backgroundColor: Colors.white,
       ),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              height: 500,
-              width: 300,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-              ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 600,
+              width: 400,
+              // decoration: BoxDecoration(
+              //   border: Border.all(
+              //     color: Colors.white,
+              //     width: 1,
+              //   ),
+              // ),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 15,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       for (var text in textData)
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black, width: 1),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            //horizontal: 4,
                           ),
-                          child: Text(text),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Text(
+                                text,
+                                style: const TextStyle(
+                                  color: Color.fromRGBO(46, 46, 60, 1),
+                                  fontFamily: 'Noto_Serif_KR',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),
@@ -173,31 +211,69 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: 20,
             ),
-            Center(
-              child: TextButton(
-                onPressed: getApiResult,
-                child: const Text("딸깍"),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.white,
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: getApiResult,
+                    child: const Text(
+                      "요약 보기",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Noto_Serif_KR',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color.fromRGBO(255, 0, 0, 0.7),
+                  ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "CLEAR",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                setTextData();
-                // String result = '채팅방 갯수: ';
-                // final channels = prefs.getStringList('channels');
-                // result += '${channels!.length}';
-                // for (var k in channels) {
-                //   final channel = prefs.getStringList(k);
-                //   for (var i in channel!) {
-                //     result += i;
-                //   }
-                //   result += '\n\n\n';
-                // }
-                // getData(result);
-              },
-              child: const Text("채팅 기록 불러오기 딸깍"),
-            ),
+            // TextButton(
+            //   onPressed: () {
+            //     setTextData();
+            //     // String result = '채팅방 갯수: ';
+            //     // final channels = prefs.getStringList('channels');
+            //     // result += '${channels!.length}';
+            //     // for (var k in channels) {
+            //     //   final channel = prefs.getStringList(k);
+            //     //   for (var i in channel!) {
+            //     //     result += i;
+            //     //   }
+            //     //   result += '\n\n\n';
+            //     // }
+            //     // getData(result);
+            //   },
+            //   child: const Text("채팅 기록 불러오기 딸깍"),
+            // ),
           ],
         ),
       ),

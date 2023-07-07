@@ -164,19 +164,25 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                         ),
                       );
                     },
-                    child: Row(
-                      children: [
-                        const Icon(Icons.ice_skating),
-                        Text(
-                          'ROOM $channel',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontFamily: 'Noto_Serif',
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 5,
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.ice_skating),
+                          Text(
+                            'ROOM $channel',
+                            style: const TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontFamily: 'Noto_Serif',
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   trailing: Switch(

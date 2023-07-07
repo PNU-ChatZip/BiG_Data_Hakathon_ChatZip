@@ -222,7 +222,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      width: 20,
+                      width: 8,
                     ),
                     const Text(
                       "Twitter",
