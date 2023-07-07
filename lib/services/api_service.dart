@@ -1,3 +1,47 @@
+// import 'dart:convert';
+//
+// import 'package:http/http.dart' as http;
+//
+// class ApiService {
+//   static const String baseUrl = "http://13.209.41.55/data";
+//
+//   Map<String, String> headers = {
+//     'Content-Type': 'application/json',
+//     'Accept': 'application/json',
+//   };
+//
+//   Map<String, String> cookies = {};
+//
+//   Future<dynamic> postChats(List<dynamic> chats) async {
+//     print(chats);
+//     List<Map<String, dynamic>> answer = [];
+//     for (var chat in chats) {
+//       answer.add(jsonDecode(chat));
+//       print(answer);
+//     }
+//     print(
+//       jsonEncode({
+//         "group_id": 1,
+//         "segment_id": 1,
+//         "data": answer,
+//       }),
+//     );
+//     final response = await http.post(
+//       Uri.parse(baseUrl),
+//       headers: headers,
+//       body: jsonEncode({
+//         "group_id": 1,
+//         "segment_id": 1,
+//         "data": answer,
+//       }),
+//     );
+//     if (response.statusCode == 200) {
+//       return jsonDecode(utf8.decode(response.bodyBytes));
+//       // return jsonDecode(response.body);
+//     }
+//     throw Error();
+//   }
+// }
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -12,32 +56,20 @@ class ApiService {
 
   Map<String, String> cookies = {};
 
+  Map<String, String> mapping = {};
+
   Future<dynamic> postChats(List<dynamic> chats) async {
-    print(chats);
-    // for (var chat in chats) {
-    //   print(jsonDecode(chat));
-    // }
-    // ap dictionary = Map.from(chats[0]);
-    // final Pkey = dictionary.keys.toList();
-    // final Pvalue = dictionary.values.toList();
     List<Map<String, dynamic>> answer = [];
+    var counter = mapping.length;
     for (var chat in chats) {
-      answer.add(jsonDecode(chat));
+      Map<String, dynamic> chatDecoded = jsonDecode(chat);
+      String original = chatDecoded['name'];
+      String newName = 'P$counter';
+      chatDecoded['name'] = newName;
+      mapping[newName] = original;
+      answer.add(chatDecoded);
       print(answer);
     }
-    // for (int i = 0; i < Pkey.length; i++) {
-    //   answer.add(
-    //     {"name": Pkey[i], "comment": Pvalue[i]},
-    //   );
-    // }
-    // print(answer);
-    print(
-      jsonEncode({
-        "group_id": 1,
-        "segment_id": 1,
-        "data": answer,
-      }),
-    );
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: headers,
@@ -48,7 +80,15 @@ class ApiService {
       }),
     );
     if (response.statusCode == 200) {
-      return jsonDecode(utf8.decode(response.bodyBytes));
+      Map<String, dynamic> responseDecoded =
+          jsonDecode(utf8.decode(response.bodyBytes));
+      for (int i = 0; i < mapping.length; i++) {
+        int th = i;
+        responseDecoded['result'] = responseDecoded['result']
+            .toString()
+            .replaceAll('P$th', mapping['P$th']!);
+      }
+      return (responseDecoded);
       // return jsonDecode(response.body);
     }
     throw Error();
