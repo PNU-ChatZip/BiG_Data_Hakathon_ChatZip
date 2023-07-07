@@ -10,15 +10,29 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(46, 46, 60, 1),
       appBar: AppBar(
-        title: const Text('Chat zip'),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Color.fromRGBO(46, 46, 60, 1),
+        ),
+        title: const Text(
+          'C H A T  Z I P',
+          style: TextStyle(
+            color: Color.fromRGBO(46, 46, 60, 1),
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+            fontFamily: 'Noto_Serif',
+          ),
+          textAlign: TextAlign.center,
+        ),
         actions: [
           IconButton(
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NotificationSetting(),
+                  builder: (context) => const NotificationSetting(),
                 ),
               );
             },
@@ -63,10 +77,11 @@ class HomeScreen extends StatelessWidget {
                         width: 10,
                       ),
                       const Text(
-                        "카카오톡",
+                        "KakaoTalk",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 30,
+                          fontFamily: 'Noto_Serif',
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -88,8 +103,8 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 45,
+                      height: 45,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/images/instagram.png'),
@@ -105,6 +120,7 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white,
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'Noto_Serif',
                       ),
                     ),
                     const Text(
@@ -148,6 +164,7 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.black,
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'Noto_Serif',
                       ),
                     ),
                     const Text(
@@ -186,11 +203,12 @@ class HomeScreen extends StatelessWidget {
                       width: 20,
                     ),
                     const Text(
-                      "twitter",
+                      "Twitter",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 30,
                         fontWeight: FontWeight.w600,
+                        fontFamily: 'Noto_Serif',
                       ),
                     ),
                     const Text(
