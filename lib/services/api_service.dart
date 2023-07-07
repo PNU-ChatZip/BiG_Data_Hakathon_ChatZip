@@ -56,17 +56,23 @@ class ApiService {
 
   Map<String, String> cookies = {};
 
-  Map<String, String> mapping = {};
+  Map<String, String> OriToNew = {};
+  Map<String, String> NewToOri = {};
 
   Future<dynamic> postChats(List<dynamic> chats) async {
     List<Map<String, dynamic>> answer = [];
-    var counter = mapping.length;
     for (var chat in chats) {
+      var counter = OriToNew.length;
       Map<String, dynamic> chatDecoded = jsonDecode(chat);
       String original = chatDecoded['name'];
       String newName = 'P$counter';
+      if (OriToNew.containsKey(original)) {
+        newName = OriToNew[original]!;
+      } else {
+        OriToNew[original] = newName;
+        NewToOri[newName] = original;
+      }
       chatDecoded['name'] = newName;
-      mapping[newName] = original;
       answer.add(chatDecoded);
       print(answer);
     }
@@ -82,11 +88,11 @@ class ApiService {
     if (response.statusCode == 200) {
       Map<String, dynamic> responseDecoded =
           jsonDecode(utf8.decode(response.bodyBytes));
-      for (int i = 0; i < mapping.length; i++) {
+      for (int i = 0; i < NewToOri.length; i++) {
         int th = i;
         responseDecoded['result'] = responseDecoded['result']
             .toString()
-            .replaceAll('P$th', mapping['P$th']!);
+            .replaceAll('P$th', NewToOri['P$th']!);
       }
       return (responseDecoded);
       // return jsonDecode(response.body);
