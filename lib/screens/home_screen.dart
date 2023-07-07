@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'chat_channel_screen.dart';
-import 'notification_setting.dart';
+import 'package:notification_listener_service/notification_listener_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({
@@ -27,16 +27,38 @@ class HomeScreen extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationSetting(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: TextButton(
+              onPressed: () async {
+                final res =
+                    await NotificationListenerService.requestPermission();
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.settings,
+                    color: Color.fromRGBO(46, 46, 60, 1),
+                    size: 15,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "알림 권한 설정",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Noto_Serif_KR',
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
