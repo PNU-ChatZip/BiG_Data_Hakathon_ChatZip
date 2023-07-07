@@ -129,7 +129,9 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ChatScreen(),
+                        builder: (context) => ChatScreen(
+                          channelIndex: channel,
+                        ),
                       ),
                     );
                   },
@@ -149,9 +151,9 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                   inactiveTrackColor: const Color.fromRGBO(19, 19, 25, 1),
                   value: WhiteList[channel - 1],
                   onChanged: (bool? value) {
-                    setState(() {
-                      WhiteList[channel - 1] = value!;
-                    });
+                    // setState(() {
+                    //   WhiteList[channel - 1] = value!;
+                    // });
                   },
                 ),
               ),

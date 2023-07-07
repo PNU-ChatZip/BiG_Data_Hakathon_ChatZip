@@ -10,8 +10,10 @@ import 'package:temp10/models/chat_model.dart';
 import 'package:temp10/services/api_service.dart';
 
 class ChatScreen extends StatefulWidget {
+  final int channelIndex;
   const ChatScreen({
     super.key,
+    required this.channelIndex,
   });
 
   @override
@@ -93,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chat zip'),
+        title: Text('Chat zip 채팅방 ${widget.channelIndex}'),
       ),
       body: Center(
         child: Column(
