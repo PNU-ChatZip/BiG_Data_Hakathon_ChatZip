@@ -130,7 +130,7 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ChatScreen(
-                          channelIndex: channel,
+                          channelIndex: channel - 1,
                         ),
                       ),
                     );
