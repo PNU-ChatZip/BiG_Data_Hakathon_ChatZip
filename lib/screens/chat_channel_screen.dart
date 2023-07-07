@@ -19,41 +19,62 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(46, 46, 60, 1),
       appBar: AppBar(
-        title: const Text('Chat zip'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              for (var channel in totalChannel)
-                ListTile(
-                  tileColor: Colors.yellow[50],
-                  title: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChatScreen(),
-                        ),
-                      );
-                    },
-                    child: Text('채팅방$channel'),
-                  ),
-                  trailing: Switch(
-                    activeColor: Colors.red,
-                    value: WhiteList[channel - 1],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        WhiteList[channel - 1] = value!;
-                      });
-                    },
-                  ),
-                )
-            ],
+        iconTheme: const IconThemeData(
+          color: Color.fromRGBO(46, 46, 60, 1),
+        ),
+        title: const Text(
+          'C H A T  Z I P',
+          style: TextStyle(
+            color: Color.fromRGBO(46, 46, 60, 1),
+            fontWeight: FontWeight.w800,
+            fontFamily: 'Noto_Serif',
+            fontSize: 20,
           ),
+        ),
+        backgroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            for (var channel in totalChannel)
+              ListTile(
+                tileColor: const Color.fromRGBO(46, 46, 60, 1),
+                title: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChatScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    '✔️   ROOM $channel',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontFamily: 'Noto_Serif',
+                    ),
+                  ),
+                ),
+                trailing: Switch(
+                  activeColor: Colors.white,
+                  activeTrackColor: const Color.fromRGBO(124, 251, 95, 1),
+                  inactiveTrackColor: const Color.fromRGBO(19, 19, 25, 1),
+                  value: WhiteList[channel - 1],
+                  onChanged: (bool? value) {
+                    setState(() {
+                      WhiteList[channel - 1] = value!;
+                    });
+                  },
+                ),
+              ),
+          ],
         ),
       ),
     );
