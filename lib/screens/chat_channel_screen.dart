@@ -10,8 +10,8 @@ import 'chat_screen.dart';
 
 class ChatChannelScreen extends StatefulWidget {
   const ChatChannelScreen({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ChatChannelScreen> createState() => _ChatChannelScreenState();
@@ -20,11 +20,9 @@ class ChatChannelScreen extends StatefulWidget {
 class _ChatChannelScreenState extends State<ChatChannelScreen> {
   final List<int> totalChannel = [];
   static List<bool> WhiteList = [];
-  // final List<int> totalChannel = [1, 2, 3, 4, 5];
-  // static List<bool> WhiteList = [false, false, false, false, false];
   List<ServiceNotificationEvent> events = [];
   StreamSubscription<ServiceNotificationEvent>? _subscription;
-  late final SharedPreferences prefs;
+  late SharedPreferences prefs;
 
   String convertUint8ListToString(Uint8List uint8list) {
     Uint8List bytes = Uint8List.fromList(uint8list);
@@ -32,25 +30,25 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
   }
 
   void saveEvent(ServiceNotificationEvent event) async {
-    // prefs = await SharedPreferences.getInstance();
     final channels = prefs.getStringList('channels');
     if (event.largeIcon != null) {
       final icon = convertUint8ListToString(event.largeIcon!);
       List<String>? channel = prefs.getStringList(icon);
       if (channel != null) {
-        print("존재하는 채팅방");
+        print("Existing Chat Room");
         channel.add({event.title, event.content}.toString());
         prefs.setStringList(icon, channel);
       } else {
-        print("없는 채팅방");
+        print("New Chat Room");
 
-        // 새로운 채팅방 추가
-        final channels = prefs.getStringList('channels');
+        // Add new chat room
         channels!.add(icon);
         prefs.setStringList('channels', channels);
-        prefs.setStringList(icon, [event.content!]);
+        prefs.setStringList(icon, [
+          {event.title, event.content}.toString()
+        ]);
 
-        // whitelist 추가
+        // Add to whitelist
         final whiteList = prefs.getStringList('whiteList');
         whiteList!.add("false");
         setState(() {
@@ -59,10 +57,10 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
         });
       }
     }
-    print("현재 저장된 채팅방 갯수: ${channels?.length}");
+    print("Current number of chat rooms: ${channels?.length}");
   }
 
-  Future initPrefs() async {
+  Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     final channels = prefs.getStringList('channels');
     if (channels == null) {
@@ -98,6 +96,12 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
   }
 
   @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(46, 46, 60, 1),
@@ -122,41 +126,63 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             for (var channel in totalChannel)
-              ListTile(
-                tileColor: const Color.fromRGBO(46, 46, 60, 1),
-                title: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          channelIndex: channel - 1,
+              if (channel - 1 < WhiteList.length) // Add a check for valid index
+                ListTile(
+                  tileColor: const Color.fromRGBO(46, 46, 60, 1),
+                  title: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(
+                            channelIndex: channel - 1,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    '✔️   ROOM $channel',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      fontFamily: 'Noto_Serif',
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.ice_skating),
+                        Text(
+                          'ROOM $channel',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontFamily: 'Noto_Serif',
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  trailing: Switch(
+                    activeColor: Colors.white,
+                    activeTrackColor: const Color.fromRGBO(124, 251, 95, 1),
+                    inactiveTrackColor: const Color.fromRGBO(19, 19, 25, 1),
+                    value: WhiteList[channel - 1],
+                    onChanged: (bool? value) {
+                      setState(() {
+                        WhiteList[channel - 1] = value!;
+                      });
+                      // Update whitelist value in SharedPreferences
+                      List<String>? whiteList =
+                          prefs.getStringList('whiteList');
+
+                      // Initialize whiteList if it's null or length is less than required
+                      if (whiteList == null ||
+                          whiteList.length <= channel - 1) {
+                        whiteList = List<String>.filled(channel, 'false',
+                            growable: true);
+                        // Set all values to 'false' as default
+                      }
+
+                      whiteList[channel - 1] = value!.toString();
+                      prefs.setStringList('whiteList', whiteList);
+                      setState(() {});
+                      print(whiteList);
+                    },
+                  ),
                 ),
-                trailing: Switch(
-                  activeColor: Colors.white,
-                  activeTrackColor: const Color.fromRGBO(124, 251, 95, 1),
-                  inactiveTrackColor: const Color.fromRGBO(19, 19, 25, 1),
-                  value: WhiteList[channel - 1],
-                  onChanged: (bool? value) {
-                    // setState(() {
-                    //   WhiteList[channel - 1] = value!;
-                    // });
-                  },
-                ),
-              ),
           ],
         ),
       ),
