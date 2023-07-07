@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   var result = "대충 텍스트 슈루룩 화면";
 
   Future initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
+    // prefs = await SharedPreferences.getInstance();
     // final channels = prefs.getStringList('channels');
     // if (channels == null) {
     //   await prefs.setStringList('channels', []);
@@ -41,11 +41,26 @@ class _ChatScreenState extends State<ChatScreen> {
     return String.fromCharCodes(bytes);
   }
 
+  void getApiResult() async {
+    final channels = prefs.getStringList('channels');
+    final idx = channels![widget.channelIndex];
+    final chats = prefs.getStringList(idx);
+    final res = await ApiService().postChats(chats!);
+    print(res);
+    getData(res['result']);
+    var chatData = prefs.getStringList("data${widget.channelIndex}");
+    chatData ??= [];
+    chatData.add(res['result']);
+    prefs.setStringList("data${widget.channelIndex}", chatData);
+    configSceen();
+  }
+
   void setTextData() {
     final channels = prefs.getStringList('channels');
     final idx = channels![widget.channelIndex];
     final channel = prefs.getStringList(idx);
     print(channel);
+    result = '';
     for (var t in channel!) {
       result += '$t\n';
     }
@@ -79,10 +94,21 @@ class _ChatScreenState extends State<ChatScreen> {
   //   print("현재 저장된 채팅방 갯수: ${channels?.length}");
   // }
 
+  void configSceen() async {
+    prefs = await SharedPreferences.getInstance();
+    final chatData = prefs.getStringList("data${widget.channelIndex}");
+    if (chatData != null) {
+      for (var data in chatData) {
+        result += '$data\n----------';
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    initPrefs();
+    // initPrefs();
+    configSceen();
     // _subscription =
     //     NotificationListenerService.notificationsStream.listen((event) {
     //   saveEvent(event);
@@ -129,27 +155,9 @@ class _ChatScreenState extends State<ChatScreen> {
               height: 50,
             ),
             Center(
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(
-                  padding: MaterialStateProperty.all<EdgeInsets>(
-                    const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 15,
-                    ),
-                  ),
-                ),
-                child: GestureDetector(
-                  onTap: () async {
-                    final channels = prefs.getStringList('channels');
-                    final idx = channels![widget.channelIndex];
-                    final chats = prefs.getStringList(idx);
-                    final res = await ApiService().postChats(chats!);
-                    print(res);
-                    getData(res.toString());
-                  },
-                  child: const Text("딸깍"),
-                ),
+              child: TextButton(
+                onPressed: getApiResult,
+                child: const Text("딸깍"),
               ),
             ),
             TextButton(
@@ -167,7 +175,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 // }
                 // getData(result);
               },
-              child: const Text("채팅방 딸깍"),
+              child: const Text("채팅 기록 불러오기 딸깍"),
             ),
           ],
         ),

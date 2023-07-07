@@ -38,8 +38,11 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
       if (channel != null) {
         final channelIndex = channels!.indexOf(icon);
         print("Existing Chat Room");
-        if (whiteList![channelIndex] == "true")
-          channel.add({event.title, event.content}.toString());
+        if (whiteList![channelIndex] == "true") {
+          channel
+              .add('{"name":"${event.title}", "comment":"${event.content}"}');
+          // channel.add({event.title, event.content}.toString());
+        }
         prefs.setStringList(icon, channel);
       } else {
         print("New Chat Room");
@@ -187,7 +190,6 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       });
                       List<String>? whiteList =
                           prefs.getStringList('whiteList');
-<<<<<<< HEAD
                       //
                       // // Initialize whiteList if it's null or length is less than required
                       // if (whiteList == null ||
@@ -198,16 +200,6 @@ class _ChatChannelScreenState extends State<ChatChannelScreen> {
                       // }
 
                       whiteList![channel - 1] = value!.toString();
-=======
-
-                      if (whiteList == null ||
-                          whiteList.length <= channel - 1) {
-                        whiteList = List<String>.filled(channel, 'false',
-                            growable: true);
-                      }
-
-                      whiteList[channel - 1] = value!.toString();
->>>>>>> a814de0 (comm)
                       prefs.setStringList('whiteList', whiteList);
                       setState(() {});
                       print(whiteList);

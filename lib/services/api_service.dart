@@ -14,37 +14,41 @@ class ApiService {
 
   Future<dynamic> postChats(List<dynamic> chats) async {
     print(chats);
-    for (var chat in chats) {
-      print(chat);
-    }
+    // for (var chat in chats) {
+    //   print(jsonDecode(chat));
+    // }
     // ap dictionary = Map.from(chats[0]);
     // final Pkey = dictionary.keys.toList();
     // final Pvalue = dictionary.values.toList();
-    // List<dynamic> answer = [];
+    List<Map<String, dynamic>> answer = [];
+    for (var chat in chats) {
+      answer.add(jsonDecode(chat));
+    }
     // for (int i = 0; i < Pkey.length; i++) {
     //   answer.add(
     //     {"name": Pkey[i], "comment": Pvalue[i]},
     //   );
     // }
     // print(answer);
-    // print(
-    //   jsonEncode({
-    //     "group_id": 1,
-    //     "segment_id": 1,
-    //     "data": answer,
-    //   }),
-    // );
+    print(
+      jsonEncode({
+        "group_id": 1,
+        "segment_id": 1,
+        "data": answer,
+      }),
+    );
     final response = await http.post(
       Uri.parse(baseUrl),
       headers: headers,
       body: jsonEncode({
         "group_id": 1,
         "segment_id": 1,
-        "data": chats,
+        "data": answer,
       }),
     );
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return jsonDecode(utf8.decode(response.bodyBytes));
+      // return jsonDecode(response.body);
     }
     throw Error();
   }
