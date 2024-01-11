@@ -160,11 +160,18 @@ ChatZip
 - **발전 방향성**
     - 스마트폰 시스템 API를 활용하여 알림을 가져오므로, 사용자가 권한 허용만 한다면 카카오톡 서비스 뿐만 아니라 트위터나 텔레그램 등의 플랫폼도 지원가능하게 추가할 예정이다.
 
-# 5. 동작 영상
+# 5. 자료
 
----
+> MVP GitHub Release (APK다운로드 주소)
+  
+  [https://github.com/PNU-ChatZip/Prompter-Day-Seoul/releases/tag/v1.0.0](https://github.com/PNU-ChatZip/Prompter-Day-Seoul/releases/tag/v1.0.0)
+> 구글 드라이브 백업 다운로드 주소
+  
+  [https://drive.google.com/file/d/1YS6NlFfOIiDjCkW_3B2GZXgqMDT66zu8/view?usp=sharing](https://drive.google.com/file/d/1XYsiDOoBoT2tLoInwdPkhBH9FIWat906/view?usp=sharing)
 
-[chatzip_시연영상.mp4](Chat%20Zip%202c46c8213e684f80b3d446d884545b32/chatzip_%25EC%258B%259C%25EC%2597%25B0%25EC%2598%2581%25EC%2583%2581.mp4)
+> 사용법
+  
+https://github.com/PNU-ChatZip/Prompter-Day-Seoul/assets/34530460/92f38de7-6794-4da8-93bb-9a69dd820e32
 
 # 6. 발표 자료
 
